@@ -34,7 +34,7 @@ def send_email(subject, message, from_addr, to_addr, password):
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(from_addr, password)
             server.send_message(msg)
-            print("Emergency email sent successfully!")
+        print("Emergency email sent successfully!")
     except Exception as e:
         print(f"Error sending email: {e}")
 
@@ -121,7 +121,11 @@ def draw_welcome(screen):
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                waiting_for_key = False
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    waiting_for_key = False
 
 def main():
     sound_file = 'alarm.wav'
