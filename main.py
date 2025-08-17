@@ -4,6 +4,7 @@ import smtplib
 from email.message import EmailMessage
 import sys
 import os
+import time
 
 def play_sound(sound_file):
     try:
@@ -156,13 +157,16 @@ def main():
                 elif event.key == pygame.K_RETURN:
                     if menu_options[selected_index] == "Start Alarm":
                         in_menu = False
-                        play_sound(sound_file)
-                        geolocation = get_geolocation()
-                        print(f"Alarm triggered at {geolocation}!")
-                        subject = "Alarm Triggered!"
-                        message = f"Alarm triggered at {geolocation}!"
-                        send_email(subject, message, from_addr, to_addr, password)
-                        in_menu = True
+                        if emergency_countdown(screen):  # Only proceed if not cancelled
+                            play_sound(sound_file)
+                            geolocation = get_geolocation()
+                            print(f"Alarm triggered at {geolocation}!")
+                            subject = "EMERGENCY ALERT!"
+                            message = f"Emergency alarm triggered!\nLocation: {geolocation}"
+                            send_email(subject, message, from_addr, to_addr, password)
+                        else:
+                            print("Emergency cancelled by user")
+                        in_menu = True   
                     elif menu_options[selected_index] == "Fake Call":
                         in_menu = False
                         fake_call(screen)
